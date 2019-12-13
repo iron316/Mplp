@@ -7,6 +7,15 @@ class MyDataLoader:
         self.batch = batch
         self.num_worker = num_worker
 
+    def set_train(self):
+        raise NotImplementedError
+
+    def set_valid(self):
+        raise NotImplementedError
+
+    def set_test(self):
+        raise NotImplementedError
+
     @property
     def train_loader(self):
         return DataLoader(self.train,
