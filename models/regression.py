@@ -4,9 +4,9 @@ import torch.nn as nn
 import pytorch_lightning as pl
 
 
-class BinaryModel(pl.LightningModule):
+class RegressionModel(pl.LightningModule):
     def __init__(self, model, loader, args):
-        super(BinaryModel, self).__init__()
+        super(RegressionModel, self).__init__()
         self.hparams = args
         self.loader = loader
         self.lr = args.lr

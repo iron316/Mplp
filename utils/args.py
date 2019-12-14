@@ -3,6 +3,9 @@ import argparse
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--task", "-t", type=str,
+                        choices=["binary", "multiclass", "regressoin"],
+                        help="choice training task")
     parser.add_argument("--device", "-d", type=int, default=1,
                         help="GPU ID (negative value indicates CPU)")
     parser.add_argument("--batch", "-b", type=int, default=32,
