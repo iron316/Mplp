@@ -33,7 +33,7 @@ class BinaryModel(pl.LightningModule):
         loss = self.loss_func(predict, target).mean().unsqueeze(0)
         logs = {}
         logs["train_loss"] = loss
-        logs["train_accuracy"] = self.accracy(predict, y)
+        logs["train_accuracy"] = self._accuracy(predict, y)
         return {"loss": loss,
                 "log": logs}
 
