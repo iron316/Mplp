@@ -1,17 +1,12 @@
-from models import binary, multiclass, regression
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.logging import TestTubeLogger
-from utils.logger import make_directory
-from utils.args import parse_args
-from utils.set_seed import set_random_seed
 
-MODELS = {"binary": binary.BinaryModel,
-          "multiclass": multiclass.MulticlassModel,
-          "regression": regression.RegressionModel}
+from models import MODELS
+from utils import make_directory, parse_args, set_random_seed
 
 
-def run(arch, loader):
+def run(arch, loader, return_test=False):
     set_random_seed(2434)
     args = parse_args()
     device = list(range(args.device))
@@ -50,3 +45,6 @@ def run(arch, loader):
 
     trainer.test(model)
     print("##### test finish #####")
+
+    if return_test:
+        return model.test_predict
