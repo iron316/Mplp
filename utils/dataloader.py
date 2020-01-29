@@ -1,5 +1,5 @@
 from torch.utils.data import DataLoader
-from utils.set_seed import worker_init_fn
+from .set_seed import worker_init_fn
 
 
 class MyDataLoader:

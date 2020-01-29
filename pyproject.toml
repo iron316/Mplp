@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "plant_error_analysis"
+version = "0.1.0"
+description = ""
+authors = ["iron316 <shunta316iron@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+torch = "1.2.0"
+numpy = "1.16.4"
+pandas = "^0.25.3"
+pytorch-lightning = "0.5.3"
+torchvision = "0.4.0"
+scikit-learn = "0.20.2"
+matplotlib = "^3.1.2"
+seaborn = "^0.10.0"
+japanize-matplotlib = "^1.0.5"
+tensorboardX = "^2.0"
+ipython = "^7.11.1"
+pillow = "6.1"
+test_tube = "^0.7.5"
+
+[tool.poetry.dev-dependencies]
+jedi = "0.15.0"
+flake8 = "^3.7.9"
+isort = "^4.3.21"
+pynvim = "^0.4.1"
+python-language-server = "^0.31.7"
+autopep8 = "^1.5"
+jupyter = "^1.0.0"
+ipdb = "^0.12.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
