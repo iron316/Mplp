@@ -6,7 +6,7 @@ from models import MODELS
 from utils import make_directory, parse_args, set_random_seed
 
 
-def run(arch, loader, return_test=False):
+def train(arch, loader, return_test=False):
     set_random_seed(2434)
     args = parse_args()
     device = list(range(args.device))
@@ -47,4 +47,4 @@ def run(arch, loader, return_test=False):
     print("##### test finish #####")
 
     if return_test:
-        return model.test_predict
+        return model.test_predict()

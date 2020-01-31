@@ -5,18 +5,17 @@ import pytorch_lightning as pl
 
 
 class MulticlassModel(pl.LightningModule):
-    def __init__(self, model, loader, args):
+    def __init__(self, model, loader, args, logdir):
         super(MulticlassModel, self).__init__()
         self.hparams = args
         self.loader = loader
-        self.lr = args.lr
-        self.weight_decay = args.weight_decay
         self.model = model
+        self.logdir = logdir
         self.loss_func = nn.CrossEntropyLoss(reduction="none")
         self.test_predict = []
 
     def configure_optimizers(self):
-        return [torch.optim.Adam(self.parameters(), lr=self.lr, weight_decay=self.weight_decay)]
+        return [torch.optim.Adam(self.parameters(), lr=self.hparams.lr, weight_decay=self.hparams.weight_decay)]
 
     def forward(self, X):
         out = self.model(X)
@@ -77,6 +76,10 @@ class MulticlassModel(pl.LightningModule):
         logs["valid_accuracy"] = avg_test_accuracy
         return {"avg_test_loss": avg_test_loss,
                 "progress_bar": logs}
+
+    def load_best(self):
+        cp = torch.load(list((self.logdir / "checkpoint").glob("*.ckpt"))[0])
+        self.model.load_state_dict(cp["state_dict"])
 
     @pl.data_loader
     def tng_dataloader(self):

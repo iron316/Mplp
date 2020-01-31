@@ -68,6 +68,10 @@ class RegressionModel(pl.LightningModule):
         return {"avg_test_loss": avg_test_loss,
                 "progress_bar": logs}
 
+    def load_best(self):
+        cp = torch.load(list((self.logdir / "checkpoint").glob("*.ckpt"))[0])
+        self.model.load_state_dict(cp["state_dict"])
+
     @pl.data_loader
     def tng_dataloader(self):
         return self.loader.train_loader
