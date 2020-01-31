@@ -33,6 +33,7 @@ class MulticlassModel(pl.LightningModule):
         logs["train_loss"] = loss
         logs["train_accuracy"] = self._accuracy(predict, y)
         return {"loss": loss,
+                "progress_bar": logs,
                 "log": logs}
 
     def validation_step(self, batch, batch_nb):

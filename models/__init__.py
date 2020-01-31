@@ -1,6 +1,6 @@
-from models.binary import BinaryModel
-from models.multiclass import MulticlassModel
-from models.regression import RegressionModel
+from .binary import BinaryModel
+from .multiclass import MulticlassModel
+from .regression import RegressionModel
 
 MODELS = {"binary": BinaryModel,
           "multiclass": MulticlassModel,

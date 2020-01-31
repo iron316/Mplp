@@ -5,18 +5,17 @@ import pytorch_lightning as pl
 
 
 class BinaryModel(pl.LightningModule):
-    def __init__(self, model, loader, args):
+    def __init__(self, model, loader, args, logdir):
         super(BinaryModel, self).__init__()
         self.hparams = args
         self.loader = loader
-        self.lr = args.lr
-        self.weight_decay = args.weight_decay
+        self.logdir = logdir
         self.model = model
         self.loss_func = nn.BCEWithLogitsLoss(reduction="none")
         self.test_predict = []
 
     def configure_optimizers(self):
-        return [torch.optim.Adam(self.parameters(), lr=self.lr, weight_decay=self.weight_decay)]
+        return [torch.optim.Adam(self.parameters(), lr=self.hparams.lr, weight_decay=self.hparams.weight_decay)]
 
     def forward(self, X):
         out = self.model(X)
@@ -35,6 +34,7 @@ class BinaryModel(pl.LightningModule):
         logs["train_loss"] = loss
         logs["train_accuracy"] = self._accuracy(predict, y)
         return {"loss": loss,
+                "progress_bar": logs,
                 "log": logs}
 
     def validation_step(self, batch, batch_nb):

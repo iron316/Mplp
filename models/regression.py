@@ -5,18 +5,17 @@ import pytorch_lightning as pl
 
 
 class RegressionModel(pl.LightningModule):
-    def __init__(self, model, loader, args):
+    def __init__(self, model, loader, args, logdir):
         super(RegressionModel, self).__init__()
         self.hparams = args
         self.loader = loader
-        self.lr = args.lr
-        self.weight_decay = args.weight_decay
+        self.logdir = logdir
         self.model = model
         self.loss_func = nn.MSELoss(reduction="none")
         self.test_predict
 
     def configure_optimizers(self):
-        return [torch.optim.Adam(self.parameters(), lr=self.lr, weight_decay=self.weight_decay)]
+        return [torch.optim.Adam(self.parameters(), lr=self.hparams.lr, weight_decay=self.hparams.weight_decay)]
 
     def forward(self, X):
         out = self.model(X)

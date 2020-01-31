@@ -6,15 +6,19 @@ def parse_args():
     parser.add_argument("--task", "-t", type=str,
                         choices=["binary", "multiclass", "regressoin"],
                         help="choice training task")
+    parser.add_argument("--config", type=str,
+                        help="experiment config yaml file")
     parser.add_argument("--device", "-d", type=int, default=1,
                         help="GPU ID (negative value indicates CPU)")
     parser.add_argument("--batch", "-b", type=int, default=32,
                         help="Number of images in each mini-batch")
+    parser.add_argument("--num_worker", type=int, default=8,
+                        help="use dataload worker")
     parser.add_argument("--epoch", "-e", type=int, default=150,
                         help="Number of sweeps over the dataset to train")
-    parser.add_argument("--lr", "-l", type=float, default=1e-4,
+    parser.add_argument("--lr", "-l", type=float, default=1e-5,
                         help="Number of learning rate")
-    parser.add_argument("--weight_decay", type=float, default=1e-4,
+    parser.add_argument("--weight_decay", type=float, default=0,
                         help="Adam's weight decay")
     parser.add_argument("--stop_num", "-s", type=int, default=100,
                         help="Number of Early Stopping")

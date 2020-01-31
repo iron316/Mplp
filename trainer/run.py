@@ -2,17 +2,16 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.logging import TestTubeLogger
 
-from models import MODELS
-from utils import make_directory, parse_args, set_random_seed
+from ..models import MODELS
+from ..utils import make_directory, set_random_seed
 
 
-def train(arch, loader, return_test=False):
+def train(arch, loader, args, test=True, return_test=False):
     set_random_seed(2434)
-    args = parse_args()
     device = list(range(args.device))
     save_dir = make_directory(args.logdir)
 
-    model = MODELS[args.task](arch, loader, args)
+    model = MODELS[args.task](arch, loader, args, save_dir)
 
     exp = TestTubeLogger(save_dir=save_dir)
     exp.log_hyperparams(args)
@@ -43,8 +42,10 @@ def train(arch, loader, return_test=False):
     trainer.fit(model)
     print("##### training finish #####")
 
-    trainer.test(model)
-    print("##### test finish #####")
+    if test:
+        model.load_best()
+        trainer.test(model)
+        print("##### test finish #####")
 
-    if return_test:
-        return model.test_predict()
+        if return_test:
+            return model.test_predict()

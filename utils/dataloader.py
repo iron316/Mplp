@@ -6,6 +6,9 @@ class MyDataLoader:
     def __init__(self, batch, num_worker):
         self.batch = batch
         self.num_worker = num_worker
+        self.train = None
+        self.valid = None
+        self.test = None
 
     def set_train(self, train):
         self.train = train
@@ -36,6 +39,8 @@ class MyDataLoader:
 
     @property
     def test_loader(self):
+        if self.test is None:
+            return None
         return DataLoader(self.test,
                           batch_size=self.batch,
                           shuffle=False,
