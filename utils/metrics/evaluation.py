@@ -3,6 +3,10 @@ from sklearn.metrics import (accuracy_score, classification_report,
                              r2_score, mean_squared_error)
 
 
+def binary_eval(true_label, predict):
+    raise NotImplementedError
+
+
 def classification_eval(true_label, predict):
     matrix = confusion_matrix(true_label, predict)
     accuracy = accuracy_score(true_label, predict)

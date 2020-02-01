@@ -4,6 +4,7 @@ from pytorch_lightning.logging import TestTubeLogger
 
 from ..models import MODELS
 from ..utils import make_directory, set_random_seed
+from ..utils.metrics import EVAL
 
 
 def train(arch, loader, args, test=True, return_test=False):
@@ -45,6 +46,10 @@ def train(arch, loader, args, test=True, return_test=False):
     if test:
         model.load_best()
         trainer.test(model)
+        import pdb
+        pdb.set_trace()
+        EVAL[args.task](loader.get_label("test"), model.test_predict)
         print("##### test finish #####")
+
         if return_test:
             return model.test_predict

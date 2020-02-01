@@ -71,8 +71,8 @@ class MulticlassModel(BaseModule):
         avg_test_loss = 0.0
         self.test_predict = []
         for output in outputs:
-            pred_class, _ = torch.max(output["test_predict"], 1)
-            self.test_predict.extend(output["test_predict"].cpu().numpy().tolist())
+            _, pred_class = torch.max(output["test_predict"], 1)
+            self.test_predict.extend(pred_class.cpu().numpy().tolist())
             avg_test_loss += output["test_loss"].mean() / len(outputs)
             avg_test_accuracy += output["test_accuracy"].mean() / len(outputs)
         logs = {}
