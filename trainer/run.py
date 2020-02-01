@@ -46,6 +46,5 @@ def train(arch, loader, args, test=True, return_test=False):
         model.load_best()
         trainer.test(model)
         print("##### test finish #####")
-
         if return_test:
-            return model.test_predict()
+            return model.test_predict

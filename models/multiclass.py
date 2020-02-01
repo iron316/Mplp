@@ -1,16 +1,18 @@
+import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 
-import pytorch_lightning as pl
+from .base import BaseModule
 
 
-class MulticlassModel(pl.LightningModule):
+class MulticlassModel(BaseModule):
     def __init__(self, model, loader, args, logdir):
-        super(MulticlassModel, self).__init__()
+        super(MulticlassModel, self).__init__(
+            model,
+            logdir
+        )
         self.hparams = args
         self.loader = loader
-        self.model = model
-        self.logdir = logdir
         self.loss_func = nn.CrossEntropyLoss(reduction="none")
         self.test_predict = []
 
@@ -69,18 +71,15 @@ class MulticlassModel(pl.LightningModule):
         avg_test_loss = 0.0
         self.test_predict = []
         for output in outputs:
-            self.test_predict.extend(output["test_predict"].flatten().cpu().numpy().tolist())
+            pred_class, _ = torch.max(output["test_predict"], 1)
+            self.test_predict.extend(output["test_predict"].cpu().numpy().tolist())
             avg_test_loss += output["test_loss"].mean() / len(outputs)
             avg_test_accuracy += output["test_accuracy"].mean() / len(outputs)
         logs = {}
         logs["test_loss"] = avg_test_loss
-        logs["valid_accuracy"] = avg_test_accuracy
+        logs["test_accuracy"] = avg_test_accuracy
         return {"avg_test_loss": avg_test_loss,
                 "progress_bar": logs}
-
-    def load_best(self):
-        cp = torch.load(list((self.logdir / "checkpoint").glob("*.ckpt"))[0])
-        self.model.load_state_dict(cp["state_dict"])
 
     @pl.data_loader
     def tng_dataloader(self):

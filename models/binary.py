@@ -2,15 +2,17 @@ import torch
 import torch.nn as nn
 
 import pytorch_lightning as pl
+from .base import BaseModule
 
 
-class BinaryModel(pl.LightningModule):
+class BinaryModel(BaseModule):
     def __init__(self, model, loader, args, logdir):
-        super(BinaryModel, self).__init__()
+        super(BinaryModel, self).__init__(
+            model,
+            logdir
+        )
         self.hparams = args
         self.loader = loader
-        self.logdir = logdir
-        self.model = model
         self.loss_func = nn.BCEWithLogitsLoss(reduction="none")
         self.test_predict = []
 
@@ -80,10 +82,6 @@ class BinaryModel(pl.LightningModule):
         logs["valid_accuracy"] = avg_test_accuracy
         return {"avg_test_loss": avg_test_loss,
                 "progress_bar": logs}
-
-    def load_best(self):
-        cp = torch.load(list((self.logdir / "checkpoint").glob("*.ckpt"))[0])
-        self.model.load_state_dict(cp["state_dict"])
 
     @pl.data_loader
     def tng_dataloader(self):

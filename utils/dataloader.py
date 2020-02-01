@@ -1,5 +1,6 @@
 from torch.utils.data import DataLoader
 from .set_seed import worker_init_fn
+from torchvision.datasets import ImageFolder
 
 
 class MyDataLoader:
@@ -18,6 +19,21 @@ class MyDataLoader:
 
     def set_test(self, test):
         self.test = test
+
+    def get_label(self, data_name="test"):
+        data = getattr(self, data_name)
+        if isinstance(data, ImageFolder):
+            return data.targets
+        elif hasattr(data, "y"):
+            return data.y
+
+    def get_data(self, data_name="test"):
+        data = getattr(self, data_name)
+        if isinstance(data, ImageFolder):
+            X, _ = zip(*data.imgs)
+            return X
+        elif hasattr(data, "X"):
+            return data.X
 
     @property
     def train_loader(self):
