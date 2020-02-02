@@ -46,8 +46,6 @@ def train(arch, loader, args, test=True, return_test=False):
     if test:
         model.load_best()
         trainer.test(model)
-        import pdb
-        pdb.set_trace()
         EVAL[args.task](loader.get_label("test"), model.test_predict)
         print("##### test finish #####")
 
